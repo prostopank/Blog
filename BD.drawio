@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-10-28T13:01:04.608Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36" etag="4rU0Y1LY4roN14npzmpl" version="13.8.5" type="github">
+<mxfile host="app.diagrams.net" modified="2020-10-28T13:10:26.004Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36" etag="t1ae-ostnUzMW41sEdCN" version="13.8.5" type="github">
   <diagram id="U9IgvnIcBCubF6fyTGkA" name="Page-1">
     <mxGraphModel dx="1185" dy="635" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -16,7 +16,7 @@
         <mxCell id="Zoh72DYlKRkxCMaAAv2T-3" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="Zoh72DYlKRkxCMaAAv2T-1">
           <mxGeometry y="52" width="160" height="8" as="geometry" />
         </mxCell>
-        <mxCell id="Zoh72DYlKRkxCMaAAv2T-4" value="Name: varchar(50)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="Zoh72DYlKRkxCMaAAv2T-1">
+        <mxCell id="Zoh72DYlKRkxCMaAAv2T-4" value="name: varchar(50)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="Zoh72DYlKRkxCMaAAv2T-1">
           <mxGeometry y="60" width="160" height="26" as="geometry" />
         </mxCell>
         <mxCell id="Zoh72DYlKRkxCMaAAv2T-5" value="email: varchar(50)" style="text;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;strokeColor=#000000;" vertex="1" parent="Zoh72DYlKRkxCMaAAv2T-19">
@@ -28,7 +28,7 @@
         <mxCell id="Zoh72DYlKRkxCMaAAv2T-26" value="" style="group" vertex="1" connectable="0" parent="1">
           <mxGeometry x="320" y="110" width="160" height="112" as="geometry" />
         </mxCell>
-        <mxCell id="Zoh72DYlKRkxCMaAAv2T-20" value="Saved articles" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;strokeColor=#000000;" vertex="1" parent="Zoh72DYlKRkxCMaAAv2T-26">
+        <mxCell id="Zoh72DYlKRkxCMaAAv2T-20" value="SavedArticles" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;strokeColor=#000000;" vertex="1" parent="Zoh72DYlKRkxCMaAAv2T-26">
           <mxGeometry width="160" height="86" as="geometry" />
         </mxCell>
         <mxCell id="Zoh72DYlKRkxCMaAAv2T-21" value="ID: serial" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="Zoh72DYlKRkxCMaAAv2T-20">
@@ -44,7 +44,7 @@
           <mxGeometry y="86" width="160" height="26" as="geometry" />
         </mxCell>
         <mxCell id="Zoh72DYlKRkxCMaAAv2T-29" value="" style="group" vertex="1" connectable="0" parent="1">
-          <mxGeometry x="500" y="310" width="160" height="130" as="geometry" />
+          <mxGeometry x="580" y="290" width="160" height="130" as="geometry" />
         </mxCell>
         <mxCell id="Zoh72DYlKRkxCMaAAv2T-18" value="" style="group" vertex="1" connectable="0" parent="Zoh72DYlKRkxCMaAAv2T-29">
           <mxGeometry width="160" height="104" as="geometry" />
