@@ -1,5 +1,8 @@
+from django.http import request
 from django.shortcuts import render
 from .models import User, Article
+from django.views.generic import ListView
+
 
 def index(request):
     articles = Article.objects.all()
@@ -17,7 +20,15 @@ def article_detail(request, id):
     }
     return render(request, template, context)
 
-def sign_in(request):
+def edit_page(request):
+    articles = Article.objects.all()
+    template = 'main/editpage.html'
+    context = {
+        'list_articles': articles,
+    }
 
+    return render(request, template, context)
+
+def sign_in(request):
     return render(request, 'main/signin.html')
 
