@@ -2,7 +2,7 @@ from django.http import request
 from django.shortcuts import render
 from .models import User, Article
 from django.views.generic import ListView
-
+from .forms import ArticleForm
 
 def index(request):
     articles = Article.objects.all()
@@ -21,13 +21,23 @@ def article_detail(request, id):
     return render(request, template, context)
 
 def edit_page(request):
+
+    if request.method == 'POST':
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+
     articles = Article.objects.all()
     template = 'main/editpage.html'
     context = {
         'list_articles': articles,
+        'form': ArticleForm(),
     }
-
     return render(request, template, context)
+
+
+
 
 def sign_in(request):
     return render(request, 'main/signin.html')
