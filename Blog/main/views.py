@@ -1,11 +1,23 @@
 from django.shortcuts import render
-from .models import User
+from .models import User, Article
 
 def index(request):
-    users = User.objects.all()
-    return render(request, 'main/index.html', {'title':'All users', 'users': users})
+    articles = Article.objects.all()
+    template = 'main/index.html'
+    context = {
+        'articles': articles,
+    }
+    return render(request, template, context)
 
-def sign_in(reques):
-    
-    return render(reques, 'main/signin.html')
+def article_detail(request, id):
+    get_article = Article.objects.get(id=id)
+    template = 'main/article.html'
+    context = {
+        'get_article': get_article,
+    }
+    return render(request, template, context)
+
+def sign_in(request):
+
+    return render(request, 'main/signin.html')
 

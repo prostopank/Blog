@@ -9,9 +9,10 @@ class User(models.Model):
         return self.name
 
 class Article(models.Model):
+    create_date = models.DateTimeField(auto_now=True)
     title = models.CharField('title', max_length=100, null=False)
     body = models.TextField('body', null=False)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    
 
     def __str__(self):
         return self.title
