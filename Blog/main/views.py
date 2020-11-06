@@ -1,8 +1,9 @@
 from django.http import request
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .models import User, Article
 from django.views.generic import ListView
 from .forms import ArticleForm
+from django.urls import reverse
 
 def index(request):
     articles = Article.objects.all()
@@ -35,6 +36,33 @@ def edit_page(request):
         'form': ArticleForm(),
     }
     return render(request, template, context)
+
+def update_page(request, id):
+
+    get_article = Article.objects.get(id=id)
+
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, instance = get_article)
+        if form.is_valid():
+            form.save()
+
+    
+    template = 'main/editpage.html'
+    context = {
+        'get_article': get_article,
+        'update': True,
+        'form': ArticleForm(instance = get_article),
+    }
+    return render(request, template, context)
+
+
+def delete_page(request, id):
+    get_article = Article.objects.get(id=id)
+    get_article.delete()
+
+    return redirect(reverse('editpage'))
+
+
 
 
 

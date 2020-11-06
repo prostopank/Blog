@@ -2,6 +2,19 @@
 
 {% block content %}
 
+
+{% if update %}
+
+<p class="mt-4">Страница Редактирования</p>
+
+<form id="update_form" method="post">{% csrf_token %}{{form}}</form><br>
+<button type="submit" form="update_form" class="btn btn-primary">Обновить</button>
+<br>
+<br>
+<a href="/editpage">Вернуться назад</a>
+
+{% else %}
+
 <table class="table table-striped">
     <thead>
       <tr>
@@ -20,42 +33,41 @@
         <td>{{i.title}}</td>
         <td>{{i.body|truncatechars:"100"}}</td>
         <td>{{i.create_date}}</td>
-        <td><a href="">редактировать</a></td>
-        <td><a href="">удалить</a></td>
+        <td><a href="{% url 'updatepage' i.id %}">редактировать</a></td>
+        <td><a href="{% url 'deletepage' i.id %}">удалить</a></td>
       </tr>
       {% endfor %}
     </tbody>
 </table>
 
-
-<!-- jQuery and JS bundle w/ Popper.js -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    Launch demo modal
-  </button>
-  
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form id="add_form" method="post">{% csrf_token %}{{form}}</form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-          <button type="button" class="btn btn-primary">Сохранить</button>
-        </div>
+  Добавить статью
+</button><br>
+<br>
+
+ <!-- Modal -->
+ <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="add_form" method="post">{% csrf_token %}{{form}}</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+        <button type="submit" form="add_form" class="btn btn-primary">Сохранить</button>
       </div>
     </div>
   </div>
+</div>
+
+{% endif %}
+
 
 {% endblock %}
