@@ -1,4 +1,5 @@
 from django.http import request
+from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.views.generic.edit import DeleteView
 from .models import Article
@@ -6,7 +7,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.views import LoginView, LogoutView 
 from .forms import ArticleForm, LoginUserForm, RegisterUserForm
 from django.contrib.auth.models import User
-from django.urls import reverse, reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 
 
 class HomeListView(ListView):
@@ -19,7 +21,8 @@ class ArticleDetail(DetailView):
     template_name = 'main/article.html'
     context_object_name = 'get_article'
 
-class ArticleEditView(CreateView):
+class ArticleEditView(LoginRequiredMixin, CreateView):
+    login_url = reverse_lazy('login')
     model = Article
     template_name = 'main/editpage.html'
     form_class = ArticleForm
@@ -27,8 +30,13 @@ class ArticleEditView(CreateView):
     def get_context_data(self, **kwargs):
         kwargs['list_articles'] = Article.objects.all()
         return super().get_context_data(**kwargs)
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user_id = self.request.user
+        self.object.save()
+        return super().form_valid(form)
 
-class ArticleUpdateView(UpdateView):
+class ArticleUpdateView(LoginRequiredMixin, UpdateView):
     model = Article
     template_name = 'main/editpage.html'
     form_class = ArticleForm
@@ -36,11 +44,23 @@ class ArticleUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         kwargs['update'] = True
         return super().get_context_data(**kwargs)
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        if self.request.user != kwargs['instance'].user_id:
+            return self.handle_no_permission()
+        return kwargs
 
-class ArticleDeleteView(DeleteView):
+class ArticleDeleteView(LoginRequiredMixin, DeleteView):
     model = Article
     template_name = 'main/editpage.html'
     success_url = reverse_lazy('editpage')
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.request.user != self.object.user_id:
+            return self.handle_no_permission()
+        success_url = self.get_success_url()
+        self.object.delete()
+        return HttpResponseRedirect(success_url)
 
 
 class UserLoginView(LoginView):

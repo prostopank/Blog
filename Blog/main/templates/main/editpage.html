@@ -19,6 +19,7 @@
     <thead>
       <tr>
         <th scope="col">id</th>
+        <th scope="col">Автор</th>
         <th scope="col">Название</th>
         <th scope="col">Body</th>
         <th scope="col">Дата создания</th>
@@ -28,23 +29,26 @@
     </thead>
     <tbody>
       {% for i in list_articles %}
+      {% if request.user == i.user_id %}
       <tr>
         <th scope="row">{{i.id}}</th>
+        <td>{{i.user_id}}</td>
         <td>{{i.title}}</td>
         <td>{{i.body|truncatechars:"100"}}</td>
         <td>{{i.create_date}}</td>
         <td><a href="{% url 'updatepage' i.id %}">редактировать</a></td>
-        <form id="delete_form" action="{% url 'deletepage' i.id %}" method="POST">{% csrf_token %}</form>
-        <td><a href="javascript: void()" onclick="delete_question()">удалить</a>
+        <form id="delete_form{{i.id}}" action="{% url 'deletepage' i.id %}" method="POST">{% csrf_token %}</form>
+        <td><a href="javascript: void()" onclick="delete_question{{i.id}}()">удалить</a>
           <script>
-            function delete_question() {
+            function delete_question{{i.id}}() {
               if (confirm("Подтвердите: ")){
-                document.getElementById('delete_form').submit()
+                document.getElementById('delete_form{{i.id}}').submit()
               }
             }
             </script>
         </td>
       </tr>
+      {% endif %}
       {% endfor %}
     </tbody>
 </table>

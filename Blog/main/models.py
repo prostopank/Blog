@@ -1,7 +1,9 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Article(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     create_date = models.DateTimeField(auto_now=True)
     title = models.CharField('title', max_length=100, null=False)
     body = models.TextField('body', null=False)
