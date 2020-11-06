@@ -13,6 +13,7 @@
           <a class="p-2 text-dark" href="/">Статьи</a>
           <a class="p-2 text-dark" href="/editpage">Редактирование</a>
           {% if request.user.is_authenticated %}
+          <td>{{request.user}}</td>
           <a class="btn btn-danger" href="logout">Выйти</a>
           {% else %}
           <a class="p-2 text-dark" href="/login">Войти</a>
