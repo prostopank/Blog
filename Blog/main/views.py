@@ -1,72 +1,61 @@
 from django.http import request
 from django.shortcuts import redirect, render
-from .models import User, Article
-from django.views.generic import ListView
-from .forms import ArticleForm
-from django.urls import reverse
-
-def index(request):
-    articles = Article.objects.all()
-    template = 'main/index.html'
-    context = {
-        'articles': articles,
-    }
-    return render(request, template, context)
-
-def article_detail(request, id):
-    get_article = Article.objects.get(id=id)
-    template = 'main/article.html'
-    context = {
-        'get_article': get_article,
-    }
-    return render(request, template, context)
-
-def edit_page(request):
-
-    if request.method == 'POST':
-        form = ArticleForm(request.POST)
-        if form.is_valid():
-            form.save()
+from django.views.generic.edit import DeleteView
+from .models import Article
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.views import LoginView, LogoutView 
+from .forms import ArticleForm, LoginUserForm, RegisterUserForm
+from django.contrib.auth.models import User
+from django.urls import reverse, reverse_lazy
 
 
-    articles = Article.objects.all()
-    template = 'main/editpage.html'
-    context = {
-        'list_articles': articles,
-        'form': ArticleForm(),
-    }
-    return render(request, template, context)
+class HomeListView(ListView):
+    model = Article
+    template_name = 'main/index.html'
+    context_object_name = 'articles'
 
-def update_page(request, id):
+class ArticleDetail(DetailView):
+    model = Article
+    template_name = 'main/article.html'
+    context_object_name = 'get_article'
 
-    get_article = Article.objects.get(id=id)
+class ArticleEditView(CreateView):
+    model = Article
+    template_name = 'main/editpage.html'
+    form_class = ArticleForm
+    success_url = reverse_lazy('editpage')
+    def get_context_data(self, **kwargs):
+        kwargs['list_articles'] = Article.objects.all()
+        return super().get_context_data(**kwargs)
 
-    if request.method == 'POST':
-        form = ArticleForm(request.POST, instance = get_article)
-        if form.is_valid():
-            form.save()
+class ArticleUpdateView(UpdateView):
+    model = Article
+    template_name = 'main/editpage.html'
+    form_class = ArticleForm
+    success_url = reverse_lazy('editpage')
+    def get_context_data(self, **kwargs):
+        kwargs['update'] = True
+        return super().get_context_data(**kwargs)
 
-    
-    template = 'main/editpage.html'
-    context = {
-        'get_article': get_article,
-        'update': True,
-        'form': ArticleForm(instance = get_article),
-    }
-    return render(request, template, context)
-
-
-def delete_page(request, id):
-    get_article = Article.objects.get(id=id)
-    get_article.delete()
-
-    return redirect(reverse('editpage'))
-
-
+class ArticleDeleteView(DeleteView):
+    model = Article
+    template_name = 'main/editpage.html'
+    success_url = reverse_lazy('editpage')
 
 
+class UserLoginView(LoginView):
+    template_name = 'main/login.html'
+    form_class = LoginUserForm
+    success_url = reverse_lazy('editpage')
+    def get_success_url(self):
+        return self.success_url
 
 
-def sign_in(request):
-    return render(request, 'main/signin.html')
+class RegisterUserView(CreateView):
+    model = User
+    template_name = 'main/register.html'
+    form_class = RegisterUserForm
+    success_url = reverse_lazy('editpage')
 
+class UserLogoutView(LogoutView):
+    next_page = reverse_lazy('editpage')

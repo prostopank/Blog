@@ -34,7 +34,16 @@
         <td>{{i.body|truncatechars:"100"}}</td>
         <td>{{i.create_date}}</td>
         <td><a href="{% url 'updatepage' i.id %}">редактировать</a></td>
-        <td><a href="{% url 'deletepage' i.id %}">удалить</a></td>
+        <form id="delete_form" action="{% url 'deletepage' i.id %}" method="POST">{% csrf_token %}</form>
+        <td><a href="javascript: void()" onclick="delete_question()">удалить</a>
+          <script>
+            function delete_question() {
+              if (confirm("Подтвердите: ")){
+                document.getElementById('delete_form').submit()
+              }
+            }
+            </script>
+        </td>
       </tr>
       {% endfor %}
     </tbody>
@@ -66,6 +75,8 @@
     </div>
   </div>
 </div>
+
+<a href="/">Вернуться назад</a>
 
 {% endif %}
 
