@@ -4,8 +4,9 @@ from django.shortcuts import redirect, render
 from django.views.generic.edit import DeleteView
 from .models import Article
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic.edit import FormMixin
 from django.contrib.auth.views import LoginView, LogoutView 
-from .forms import ArticleForm, LoginUserForm, RegisterUserForm
+from .forms import ArticleForm, LoginUserForm, RegisterUserForm, CommentForm
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -16,17 +17,31 @@ class HomeListView(ListView):
     template_name = 'main/index.html'
     context_object_name = 'articles'
 
-class ArticleDetail(DetailView):
+class ArticleDetail(FormMixin, DetailView):
     model = Article
     template_name = 'main/article.html'
     context_object_name = 'get_article'
+    form_class = CommentForm
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.article_id = self.get_object()
+        self.object.article_id = self.request.user
+        self.object.save()
+        return super().form_valid(form)
+
 
 class ArticleEditView(LoginRequiredMixin, CreateView):
     login_url = reverse_lazy('login')
     model = Article
     template_name = 'main/editpage.html'
     form_class = ArticleForm
-    success_url = reverse_lazy('editpage')
+    success_url = reverse_lazy('article/{Article.get_object().id}')
     def get_context_data(self, **kwargs):
         kwargs['list_articles'] = Article.objects.all()
         return super().get_context_data(**kwargs)

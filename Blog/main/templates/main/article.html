@@ -6,6 +6,19 @@
         <h1>{{get_article.title}}</h1>
         <p>{{get_article.body}}</p>
         <a href="/">Вернуться назад</a>
+        <hr>
+       
+    
+    <p>Comments</p>
+    <div class="modal-body">
+      <form action="" id="add_form" method="post">{% csrf_token %}{{form.as_p}}</form>
+    </div>
+      <button type="submit" form="add_form" class="btn btn-primary">Сохранить</button>
+  
+        
+
+
+
     </div>
 
 {% endblock %}
