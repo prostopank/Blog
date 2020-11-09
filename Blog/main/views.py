@@ -45,6 +45,7 @@ class ArticleEditView(LoginRequiredMixin, CreateView):
     model = Article
     template_name = 'main/editpage.html'
     form_class = ArticleForm
+    success_url = reverse_lazy('editpage')
     def get_context_data(self, **kwargs):
         kwargs['list_articles'] = Article.objects.all()
         return super().get_context_data(**kwargs)
