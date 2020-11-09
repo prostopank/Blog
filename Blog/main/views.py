@@ -98,3 +98,9 @@ class RegisterUserView(CreateView):
 
 class UserLogoutView(LogoutView):
     next_page = reverse_lazy('editpage')
+
+class SearchView(ListView):
+    template_name = 'main/search.html'
+    def get_queryset(self):
+        return Article.objects.filter(title__icontains=self.request.GET.get("search"))
+    

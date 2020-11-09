@@ -1,0 +1,15 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+{% for i in object_list%}
+<div class="list-group.mt-4">
+    <br>
+    <a class="text-dark" href="/article/{{i.id}}">{{i.title}}<br>{{i.body|truncatechars:"100"}}</a>
+    <br>
+</div>
+
+{% endfor %}
+
+
+{% endblock %}
