@@ -22,6 +22,10 @@ class ArticleDetail(FormMixin, DetailView):
     template_name = 'main/article.html'
     context_object_name = 'get_article'
     form_class = CommentForm
+    
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('article', kwargs={'pk': self.get_object().id})
+
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
@@ -31,7 +35,7 @@ class ArticleDetail(FormMixin, DetailView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.article_id = self.get_object()
-        self.object.article_id = self.request.user
+        self.object.user_id = self.request.user
         self.object.save()
         return super().form_valid(form)
 
@@ -41,7 +45,6 @@ class ArticleEditView(LoginRequiredMixin, CreateView):
     model = Article
     template_name = 'main/editpage.html'
     form_class = ArticleForm
-    success_url = reverse_lazy('article/{Article.get_object().id}')
     def get_context_data(self, **kwargs):
         kwargs['list_articles'] = Article.objects.all()
         return super().get_context_data(**kwargs)

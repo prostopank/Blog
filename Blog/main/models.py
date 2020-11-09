@@ -14,7 +14,7 @@ class Article(models.Model):
         return self.title
 
 class Comments(models.Model):
-    article_id = models.ForeignKey(Article, on_delete=models.CASCADE)
+    article_id = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments_article')
     user_id = models.ForeignKey(User, on_delete=CASCADE)
     create_date = models.DateTimeField(auto_now=True)
     body = models.TextField('body', null=False)
