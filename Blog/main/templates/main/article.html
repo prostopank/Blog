@@ -18,8 +18,9 @@
   
       <div>
     {% for i in get_article.comments_article.all %}
-      Дата создания: {{i.create_date}}  Автор: {{i.user_id}} <br>
+      Дата создания: {{i.create_date}} <br> Автор: {{i.user_id}} <br><br>
       {{i.body}} <br>
+      <br>
       <br>
     {% endfor %}
       </div>
