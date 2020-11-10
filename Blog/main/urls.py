@@ -10,5 +10,6 @@ urlpatterns = [
     path('login', views.UserLoginView.as_view(), name='login'),
     path('register', views.RegisterUserView.as_view(), name='register'),
     path('logout', views.UserLogoutView.as_view(), name='logout'),
+    path('favoritearticle', views.AddToFavoriteView.as_view(), name='favoritearticle'),
     
 ]

@@ -18,3 +18,7 @@ class Comments(models.Model):
     user_id = models.ForeignKey(User, on_delete=CASCADE)
     create_date = models.DateTimeField(auto_now=True)
     body = models.TextField('body', null=False)
+
+class FavoriteArticle(models.Model):
+    article_id = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='favorite_article')
+    user_id = models.ForeignKey(User, on_delete=CASCADE)

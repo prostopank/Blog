@@ -1,8 +1,9 @@
 from django.http import request
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.views.generic.base import View
 from django.views.generic.edit import DeleteView
-from .models import Article
+from .models import Article, FavoriteArticle
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormMixin
 from django.contrib.auth.views import LoginView, LogoutView 
@@ -38,8 +39,8 @@ class ArticleDetail(FormMixin, DetailView):
         self.object.user_id = self.request.user
         self.object.save()
         return super().form_valid(form)
-
-
+    
+    
 class ArticleEditView(LoginRequiredMixin, CreateView):
     login_url = reverse_lazy('login')
     model = Article
@@ -80,6 +81,15 @@ class ArticleDeleteView(LoginRequiredMixin, DeleteView):
         success_url = self.get_success_url()
         self.object.delete()
         return HttpResponseRedirect(success_url)
+
+class AddToFavoriteView(View):
+    model = FavoriteArticle
+    template_name = 'main/favoritearticle.html'
+    success_url = reverse_lazy('favoritearticle')
+    def get(self, request, *args, **kwargs):
+        print('sdfssdf')
+        print(kwargs.get('list_articles'))
+        return HttpResponseRedirect('favoritearticle')
 
 
 class UserLoginView(LoginView):
