@@ -14,13 +14,21 @@
       <form action="" id="add_form" method="post">{% csrf_token %}{{form.as_p}}</form>
       <button type="submit" form="add_form" class="btn btn-primary">Сохранить</button>
     </div><br><br>
+
         {% endif %}
   
+
       <div>
     {% for i in get_article.comments_article.all %}
-      Дата создания: {{i.create_date}}  Автор: {{i.user_id}} <br>
-      {{i.body}} <br>
-      <br>
+      <div class="card container">
+        <div class="card-header">
+          Дата создания: {{i.create_date}}
+        </div>
+        <div class="card-body">
+          <h5 class="card-title"> Автор: {{i.user_id}}</h5>
+          <p class="card-text">{{i.body|truncatechars:"100"}}</p><br>
+        </div>
+      </div>
     {% endfor %}
       </div>
     </div>
