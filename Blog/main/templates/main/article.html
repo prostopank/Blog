@@ -17,12 +17,17 @@
         {% endif %}
   
       <div>
-    {% for i in get_article.comments_article.all %}
-      Дата создания: {{i.create_date}} <br> Автор: {{i.user_id}} <br><br>
-      {{i.body}} <br>
-      <br>
-      <br>
-    {% endfor %}
+        {% for i in get_article.comments_article.all %}
+        <div class="card container">
+          <div class="card-header">
+            Дата создания: {{i.create_date}}
+          </div>
+          <div class="card-body">
+            <h5 class="card-title"> Автор: {{i.user_id}}</h5>
+            <p class="card-text">{{i.body|truncatechars:"100"}}</p><br>
+          </div>
+        </div>
+      {% endfor %}
       </div>
     </div>
 
