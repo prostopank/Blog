@@ -24,6 +24,8 @@ class ArticleDetail(FormMixin, DetailView):
     context_object_name = 'get_article'
     form_class = CommentForm
     
+
+
     def get_success_url(self, **kwargs):
         return reverse_lazy('article', kwargs={'pk': self.get_object().id})
 
@@ -39,7 +41,6 @@ class ArticleDetail(FormMixin, DetailView):
         self.object.user_id = self.request.user
         self.object.save()
         return super().form_valid(form)
-    
     
 class ArticleEditView(LoginRequiredMixin, CreateView):
     login_url = reverse_lazy('login')
@@ -82,14 +83,27 @@ class ArticleDeleteView(LoginRequiredMixin, DeleteView):
         self.object.delete()
         return HttpResponseRedirect(success_url)
 
+
 class AddToFavoriteView(View):
+    def get(self, request, *args, **kwargs):
+        user_id = request.user.id
+        article_id = kwargs.get('pk')
+        if FavoriteArticle.objects.filter(article_id=article_id):
+            return HttpResponseRedirect(reverse_lazy('favoritearticle'))
+        else:    
+            FavoriteArticle.objects.create(
+                user_id_id = user_id, article_id_id = article_id
+            )
+        return HttpResponseRedirect(reverse_lazy('favoritearticle'))
+
+
+class FavoriteView(ListView):
+    context_object_name = 'favoritearticles'
     model = FavoriteArticle
     template_name = 'main/favoritearticle.html'
-    success_url = reverse_lazy('favoritearticle')
-    def get(self, request, *args, **kwargs):
-        print('sdfssdf')
-        print(kwargs.get('list_articles'))
-        return HttpResponseRedirect('favoritearticle')
+    def get_context_data(self, **kwargs):
+        kwargs['list_favorite_articles'] = Article.objects.all()
+        return super().get_context_data(**kwargs)
 
 
 class UserLoginView(LoginView):
