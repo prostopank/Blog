@@ -97,13 +97,16 @@ class AddToFavoriteView(View):
         return HttpResponseRedirect(reverse_lazy('favoritearticle'))
 
 
-class FavoriteView(ListView):
-    context_object_name = 'favoritearticles'
-    model = FavoriteArticle
-    template_name = 'main/favoritearticle.html'
-    def get_context_data(self, **kwargs):
-        kwargs['list_favorite_articles'] = Article.objects.all()
-        return super().get_context_data(**kwargs)
+class FavoriteView(View):
+    def get(self, request, *args, **kwargs):
+        user_id = User.objects.get(id = request.user.id)
+        print(user_id)
+        favorite_articles = FavoriteArticle.objects.get(user_id = user_id)
+        print(favorite_articles)
+        context = {
+            'fav': favorite_articles,
+        }
+        return render(request, 'favoritearticle.html', context)
 
 
 class UserLoginView(LoginView):

@@ -22,3 +22,6 @@ class Comments(models.Model):
 class FavoriteArticle(models.Model):
     article_id = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='favorite_article')
     user_id = models.ForeignKey(User, on_delete=CASCADE)
+
+    def __str__(self):
+        return str(self.id)
