@@ -88,7 +88,7 @@ class AddToFavoriteView(View):
     def get(self, request, *args, **kwargs):
         user_id = request.user.id
         article_id = kwargs.get('pk')
-        if FavoriteArticle.objects.filter(article_id=article_id):
+        if FavoriteArticle.objects.filter(article_id=article_id, user_id=user_id):
             return HttpResponseRedirect(reverse_lazy('favoritearticle'))
         else:    
             FavoriteArticle.objects.create(
@@ -97,12 +97,10 @@ class AddToFavoriteView(View):
         return HttpResponseRedirect(reverse_lazy('favoritearticle'))
 
 
-class FavoriteView(View):
+class FavoriteView(ListView):
     def get(self, request, *args, **kwargs):
         user_id = User.objects.get(id = request.user.id)
-        print(user_id)
-        favorite_articles = FavoriteArticle.objects.get(user_id = user_id)
-        print(favorite_articles)
+        favorite_articles = FavoriteArticle.objects.all()
         context = {
             'fav': favorite_articles,
         }
