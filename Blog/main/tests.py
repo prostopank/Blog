@@ -49,7 +49,7 @@ class BlogTestViewsCases(TestCase):
         })
         self.assertEquals(response.status_code, 302)
     
-
+ 
     def test_login_user(self):
         login = self.client.login(username = 'testuser', password = 'password')
         
