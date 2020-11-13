@@ -97,15 +97,6 @@ class AddToFavoriteView(View):
         return HttpResponseRedirect(reverse_lazy('favoritearticle'))
 
 
-"""class FavoriteView(View):
-    def get(self, request, *args, **kwargs):
-        user_id = User.objects.get(id = request.user.id)
-        favorite_articles = FavoriteArticle.objects.get(user_id = user_id)
-        context = {
-            'fav': favorite_articles,
-        }
-        return render(request, 'favoritearticle.html', context)"""
-
 class FavoriteView(View):
     def get(self, request, *args, **kwargs):
         user_id = User.objects.get(id = request.user.id)
