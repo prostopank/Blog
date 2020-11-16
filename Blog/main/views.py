@@ -101,7 +101,6 @@ class FavoriteView(View):
     def get(self, request, *args, **kwargs):
         user_id = User.objects.get(id = request.user.id)
         favorite_articles = FavoriteArticle.objects.all()
-        print(favorite_articles)
         context = {
            'fav': favorite_articles,
         }
