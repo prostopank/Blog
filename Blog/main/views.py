@@ -1,8 +1,9 @@
 from django.http import request
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.views.generic.base import View
 from django.views.generic.edit import DeleteView
-from .models import Article
+from .models import Article, FavoriteArticle
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormMixin
 from django.contrib.auth.views import LoginView, LogoutView 
@@ -23,6 +24,8 @@ class ArticleDetail(FormMixin, DetailView):
     context_object_name = 'get_article'
     form_class = CommentForm
     
+
+
     def get_success_url(self, **kwargs):
         return reverse_lazy('article', kwargs={'pk': self.get_object().id})
 
@@ -38,8 +41,7 @@ class ArticleDetail(FormMixin, DetailView):
         self.object.user_id = self.request.user
         self.object.save()
         return super().form_valid(form)
-
-
+    
 class ArticleEditView(LoginRequiredMixin, CreateView):
     login_url = reverse_lazy('login')
     model = Article
@@ -80,6 +82,30 @@ class ArticleDeleteView(LoginRequiredMixin, DeleteView):
         success_url = self.get_success_url()
         self.object.delete()
         return HttpResponseRedirect(success_url)
+
+
+class AddToFavoriteView(View):
+    def get(self, request, *args, **kwargs):
+        user_id = request.user.id
+        article_id = kwargs.get('pk')
+        if FavoriteArticle.objects.filter(article_id=article_id, user_id=user_id):
+            return HttpResponseRedirect(reverse_lazy('favoritearticle'))
+        else:    
+            FavoriteArticle.objects.create(
+                user_id_id = user_id, article_id_id = article_id
+            )
+        return HttpResponseRedirect(reverse_lazy('favoritearticle'))
+
+
+class FavoriteView(View):
+    def get(self, request, *args, **kwargs):
+        user_id = User.objects.get(id = request.user.id)
+        favorite_articles = FavoriteArticle.objects.all()
+        print(favorite_articles)
+        context = {
+           'fav': favorite_articles,
+        }
+        return render(request, 'main/favoritearticle.html', context)
 
 
 class UserLoginView(LoginView):
