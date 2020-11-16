@@ -41,6 +41,7 @@ class BlogTestViewsCases(TestCase):
             'body': 'test_body_2',
         })
         self.assertEquals(response.status_code, 302)
+        self.assertEquals(self.article.objects.title, 'test_title_2')
 
     def test_add_new_user(self):
         response = self.client.post('/register', {
