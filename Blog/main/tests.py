@@ -1,9 +1,10 @@
 from django.conf.urls import url
 from django.http import response
 from django.test import TestCase, Client, RequestFactory, SimpleTestCase
+from django.test import client
 from .models import Article, Comments
 from django.contrib.auth import get_user_model
-from django.urls import reverse, resolve, Resolver404
+from django.urls import reverse, resolve
 from . import views
 
 
@@ -107,5 +108,33 @@ class TestUrls(SimpleTestCase):
         self.assertEquals(resolve(url).func.__name__, views.AddToFavoriteView.as_view().__name__)
     
     
+class TestViews(TestCase):
+
+    def setUp(self) -> None:
+        self.user = User.objects.create(username='testuser', password='password')
+        self.article = Article.objects.create(user_id=self.user, title='testTitle', body='testBody')
+        self.comment = Comments.objects.create(user_id=self.user, article_id=self.article, body='testComment')
+
+    def test_home_list_view(self):
+        response = self.client.get(reverse('index'))
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'main/index.html')
+
+    def test_article_detail_view(self):
+        response = self.client.get(reverse('article', args=['1']))
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'main/article.html')
+    
+
+    #TODO 
+    """def test_article_update_view(self):
+        response = self.client.post(reverse('updatepage', args='1'), {
+            'user_id': self.user.id,
+            'title': 'updateTitle',
+            'body': 'updateBody',
+        })
+        print(response.resolver_match)
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(self.article.title, 'updateTitle')"""
 
     
