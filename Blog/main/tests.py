@@ -1,62 +1,16 @@
-from django.conf.urls import url
 from django.http import response
+from django.http import request
 from django.test import TestCase, Client, RequestFactory, SimpleTestCase
-from django.test import client
-from .models import Article, Comments
+from .models import Article, Comments, FavoriteArticle
 from django.contrib.auth import get_user_model
 from django.urls import reverse, resolve
 from . import views
+from . import forms
 
 
 User = get_user_model()
 
-
-"""class BlogTestViewsCases(TestCase):
-
-    def setUp(self) -> None:
-        self.client = Client()
-        self.user = User.objects.create(username='testuser', password='password')
-        self.article = Article.objects.create(user_id=self.user, title='testTitle', body='testBody')
-        self.comment = Comments.objects.create(user_id=self.user, article_id=self.article, body='testComment')
-
-    def test_home_list_view(self):
-        response = self.client.get('')
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'main/index.html')
-
-    def test_article_detail_view(self):
-        response = self.client.get(reverse('article', args=[self.article.id]))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'main/article.html')
-
-    def test_add_new_article(self):
-        response = self.client.post('/editpage', {
-            'user_id': self.user.id,
-            'title': 'test_title',
-            'body': 'test_body',
-        })
-        self.assertEquals(response.status_code, 302)
-
-    def test_update_article(self):
-        response = self.client.post('/updatepage/1', {
-            'user_id': self.user.id,
-            'title': 'test_title_2',
-            'body': 'test_body_2',
-        })
-        self.assertEquals(response.status_code, 302)
-        self.assertEquals(self.article.objects.title, 'test_title_2')
-
-    def test_add_new_user(self):
-        response = self.client.post('/register', {
-            'username': 'test_user',
-            'password': 'password',
-        })
-        self.assertEquals(response.status_code, 302)
-
-    def test_login_user(self):
-        login = self.client.login(username='testuser', password='password')
-"""
-
+#TEST URLS
 class TestUrls(SimpleTestCase):
 
     def test_index_url_is_resolves(self):
@@ -108,6 +62,7 @@ class TestUrls(SimpleTestCase):
         self.assertEquals(resolve(url).func.__name__, views.AddToFavoriteView.as_view().__name__)
     
     
+#TEST VIEWS
 class TestViews(TestCase):
 
     def setUp(self) -> None:
@@ -128,13 +83,101 @@ class TestViews(TestCase):
 
     #TODO 
     """def test_article_update_view(self):
+        login = self.client.login(username = self.user.username, password = self.user.password)
+        
         response = self.client.post(reverse('updatepage', args='1'), {
-            'user_id': self.user.id,
             'title': 'updateTitle',
             'body': 'updateBody',
         })
-        print(response.resolver_match)
+        print(response.context)
+        self.assertEqual(str(response.context['user']), self.user.username)
+        #article = Article.objects.get(id=2)
         self.assertEquals(response.status_code, 302)
-        self.assertEquals(self.article.title, 'updateTitle')"""
+        #self.assertEquals(article.title, 'updateTitle')"""
+
+    #TODO
+    #def test_article_delete_view(self):
 
     
+    def test_add_to_favorite_view(self):
+        factory = RequestFactory()
+        request = factory.get('')
+        request.user = self.user
+        response = views.AddToFavoriteView.as_view()(request, pk = '1')
+        favorite_article = FavoriteArticle.objects.get(id=1)
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(favorite_article.article_id, self.article)
+
+    def test_favorite_view(self):
+        factory = RequestFactory()
+        request = factory.get('favoritearticle')
+        request.user = self.user
+        response = views.FavoriteView.as_view()(request)
+        self.assertEquals(response.status_code, 200)
+        
+    def test_user_login_view(self):
+        login = self.client.login(username = self.user.username, password = self.user.password)
+        response = self.client.post(reverse('login'), {
+            'username': self.user.username,
+            'password': self.user.password
+        })
+        self.assertTrue(response.context['widget'].get('value'), 'testuser')
+    
+
+#TEST FORMS
+class TestForms(TestCase):
+
+    def test_article_form_valid_data(self):
+        form = forms.ArticleForm(data={
+            'title': 'test_title',
+            'body': 'test_body',
+        })
+
+        self.assertTrue(form.is_valid())
+
+    def test_article_form_no_data(self):
+        form = forms.ArticleForm(data={})
+        self.assertFalse(form.is_valid())
+        self.assertEquals(len(form.errors), 2)
+
+    #TODO
+    def test_user_login_form_valid_data(self):
+        """self.user = User.objects.create(username='testuser', password='password')
+        factory = RequestFactory()
+        request = factory.get('')
+        request.user = self.user"""
+        form = forms.LoginUserForm(data={
+            'username': 'testuser',
+            'password': 'password',
+        })
+        self.assertTrue(form.is_valid())
+    
+    def test_user_login_form_no_data(self):
+        form = forms.LoginUserForm(data={})
+        self.assertFalse(form.is_valid())
+        self.assertEquals(len(form.errors), 2)
+    
+    #TODO
+    def test_user_register_form_valid_data(self):
+        form = forms.LoginUserForm(data={
+            'username': 'testuser',
+            'password': 'password',
+        })
+        self.assertTrue(form.is_valid())
+
+    def test_user_register_form_no_data(self):
+        form = forms.RegisterUserForm(data={})
+        self.assertFalse(form.is_valid())
+        self.assertEquals(len(form.errors), 2)
+    
+    def test_comment_form_valid_data(self):
+        form = forms.CommentForm(data={
+            'body': 'test_body',
+        })
+
+        self.assertTrue(form.is_valid())
+
+    def test_comment_form_no_data(self):
+        form = forms.RegisterUserForm(data={})
+        self.assertFalse(form.is_valid())
+        self.assertEquals(len(form.errors), 2)
