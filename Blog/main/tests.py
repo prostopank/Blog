@@ -142,10 +142,10 @@ class TestForms(TestCase):
 
     #TODO
     def test_user_login_form_valid_data(self):
-        """self.user = User.objects.create(username='testuser', password='password')
+        self.user = User.objects.create(username='testuser', password='password')
         factory = RequestFactory()
         request = factory.get('')
-        request.user = self.user"""
+        request.user = self.user
         form = forms.LoginUserForm(data={
             'username': 'testuser',
             'password': 'password',
