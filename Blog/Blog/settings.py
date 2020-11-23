@@ -38,15 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
-    'django_nose'
+    #'django_nose'
 ]
 
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+#TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
-NOSE_ARGS = [
+"""NOSE_ARGS = [
     '--with-coverage',
     '--cover-package=main',
-]
+]"""
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

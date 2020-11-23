@@ -1,7 +1,9 @@
 from django.test import TestCase, RequestFactory
-from .models import Article, Comments, FavoriteArticle
-from django.urls import reverse, resolve
-from . import views
+from main.models import Article, Comments, FavoriteArticle
+from django.urls import reverse
+from main import views
+from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 User = get_user_model()
 
 

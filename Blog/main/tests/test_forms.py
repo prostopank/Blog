@@ -1,5 +1,7 @@
 from django.test import TestCase, RequestFactory
-from . import forms
+from main import forms
+from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
