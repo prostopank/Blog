@@ -1,6 +1,5 @@
-from django.http import request
-from django.http.response import HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.http.response import HttpResponseRedirect
+from django.shortcuts import render
 from django.views.generic.base import View
 from django.views.generic.edit import DeleteView
 from .models import Article, FavoriteArticle
