@@ -5,7 +5,7 @@ from django.views.generic.edit import DeleteView
 from .models import Article, FavoriteArticle
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormMixin
-from django.contrib.auth.views import LoginView, LogoutView 
+from django.contrib.auth.views import LoginView, LogoutView
 from .forms import ArticleForm, LoginUserForm, RegisterUserForm, CommentForm
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -23,7 +23,7 @@ class ArticleDetail(FormMixin, DetailView):
     template_name = 'main/article.html'
     context_object_name = 'get_article'
     form_class = CommentForm
-    
+
     def get_success_url(self, **kwargs):
         return reverse_lazy('article', kwargs={'pk': self.get_object().id})
 
@@ -40,7 +40,7 @@ class ArticleDetail(FormMixin, DetailView):
         self.object.user_id = self.request.user
         self.object.save()
         return super().form_valid(form)
-    
+
 
 class ArticleEditView(LoginRequiredMixin, CreateView):
     login_url = reverse_lazy('login')
@@ -98,9 +98,9 @@ class AddToFavoriteView(View):
         article_id = kwargs.get('pk')
         if FavoriteArticle.objects.filter(article_id=article_id, user_id=user_id):
             return HttpResponseRedirect(reverse_lazy('favoritearticle'))
-        else:    
+        else:
             FavoriteArticle.objects.create(
-                user_id_id = user_id, article_id_id = article_id
+                user_id_id=user_id, article_id_id=article_id
             )
         return HttpResponseRedirect(reverse_lazy('favoritearticle'))
 
@@ -110,7 +110,7 @@ class FavoriteView(View):
     def get(self, request, *args, **kwargs):
         favorite_articles = FavoriteArticle.objects.all()
         context = {
-           'fav': favorite_articles,
+            'fav': favorite_articles,
         }
         return render(request, 'main/favoritearticle.html', context)
 
@@ -130,12 +130,13 @@ class RegisterUserView(CreateView):
     form_class = RegisterUserForm
     success_url = reverse_lazy('editpage')
 
+
 class UserLogoutView(LogoutView):
     next_page = reverse_lazy('editpage')
+
 
 class SearchView(ListView):
     template_name = 'main/search.html'
 
     def get_queryset(self):
         return Article.objects.filter(title__icontains=self.request.GET.get("search"))
-    
