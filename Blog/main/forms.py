@@ -47,7 +47,7 @@ class RegisterUserForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comments
-        fields = fields = ('body',)
+        fields = ('body',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
