@@ -45,7 +45,6 @@ class TestForms(TestCase):
 
     def test_user_register_form_no_data(self):
         form = forms.RegisterUserForm(data={})
-
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 2)
 
