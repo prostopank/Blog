@@ -39,6 +39,17 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code, 302)
         self.assertEquals(article.title, 'updateTitle')
 
+    def test_article_delete_view(self):
+        user = User.objects.create_user(username='testuser2', password='12345')
+        c = Client()
+        c.login(username='testuser2', password='12345')
+        Article.objects.create(user_id=user, title='testTitle2', body='testBody2')
+
+        response = c.post(reverse('deletepage', args='2'))
+
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(Article.objects.count(), 1)
+
     def test_add_to_favorite_view(self):
         factory = RequestFactory()
         request = factory.get('')
