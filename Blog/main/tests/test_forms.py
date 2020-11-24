@@ -1,8 +1,6 @@
-from django.test import TestCase, RequestFactory
-from main import forms
+from django.test import TestCase
+from .. import forms
 from django.contrib.auth.models import User
-from django.contrib.auth import get_user_model
-User = get_user_model()
 
 
 class TestForms(TestCase):
@@ -20,26 +18,21 @@ class TestForms(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 2)
 
-    #TODO
     def test_user_login_form_valid_data(self):
-        self.user = User.objects.create(username='testuser', password='password')
-        factory = RequestFactory()
-        request = factory.get('')
-        request.user = self.user
+        User.objects.create_user(username='testuser', password='password')
         form = forms.LoginUserForm(data={
             'username': 'testuser',
             'password': 'password',
         })
         self.assertTrue(form.is_valid())
-    
+
     def test_user_login_form_no_data(self):
         form = forms.LoginUserForm(data={})
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 2)
-    
-    #TODO
+
     def test_user_register_form_valid_data(self):
-        form = forms.LoginUserForm(data={
+        form = forms.RegisterUserForm(data={
             'username': 'testuser',
             'password': 'password',
         })
@@ -49,7 +42,7 @@ class TestForms(TestCase):
         form = forms.RegisterUserForm(data={})
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 2)
-    
+
     def test_comment_form_valid_data(self):
         form = forms.CommentForm(data={
             'body': 'test_body',
