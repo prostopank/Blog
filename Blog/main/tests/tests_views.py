@@ -1,10 +1,8 @@
 from django.test import TestCase, RequestFactory
-from main.models import Article, Comments, FavoriteArticle
+from ..models import Article, Comments, FavoriteArticle
 from django.urls import reverse
-from main import views
+from .. import views
 from django.contrib.auth.models import User
-from django.contrib.auth import get_user_model
-User = get_user_model()
 
 
 class TestViews(TestCase):
@@ -16,39 +14,36 @@ class TestViews(TestCase):
 
     def test_home_list_view(self):
         response = self.client.get(reverse('index'))
+
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'main/index.html')
 
     def test_article_detail_view(self):
         response = self.client.get(reverse('article', args=['1']))
+
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'main/article.html')
-    
 
-    #TODO 
-    """def test_article_update_view(self):
-        login = self.client.login(username = self.user.username, password = self.user.password)
-        
-        response = self.client.post(reverse('updatepage', args='1'), {
+    def test_article_update_view(self):
+        user = User.objects.create_user(username='testuser1', password='12345')
+        article = Article.objects.create(user_id=user, title='testTitle1', body='testBody1')
+
+        response = self.client.post(reverse('updatepage', args='2'), {
             'title': 'updateTitle',
             'body': 'updateBody',
         })
-        print(response.context)
-        self.assertEqual(str(response.context['user']), self.user.username)
-        #article = Article.objects.get(id=2)
+
         self.assertEquals(response.status_code, 302)
-        #self.assertEquals(article.title, 'updateTitle')"""
+        self.assertEquals(article.title, 'updateTitle')
 
-    #TODO
-    #def test_article_delete_view(self):
-
-    
     def test_add_to_favorite_view(self):
         factory = RequestFactory()
         request = factory.get('')
         request.user = self.user
-        response = views.AddToFavoriteView.as_view()(request, pk = '1')
+
+        response = views.AddToFavoriteView.as_view()(request, pk='1')
         favorite_article = FavoriteArticle.objects.get(id=1)
+
         self.assertEquals(response.status_code, 302)
         self.assertEquals(favorite_article.article_id, self.article)
 
@@ -56,13 +51,15 @@ class TestViews(TestCase):
         factory = RequestFactory()
         request = factory.get('favoritearticle')
         request.user = self.user
+
         response = views.FavoriteView.as_view()(request)
+
         self.assertEquals(response.status_code, 200)
-        
+
     def test_user_login_view(self):
-        login = self.client.login(username = self.user.username, password = self.user.password)
         response = self.client.post(reverse('login'), {
             'username': self.user.username,
             'password': self.user.password
         })
+
         self.assertTrue(response.context['widget'].get('value'), 'testuser')
