@@ -35,7 +35,7 @@ class TestViews(TestCase):
             'body': 'updateBody',
         })
         article = Article.objects.get(id=2)
-        
+
         self.assertEquals(response.status_code, 302)
         self.assertEquals(article.title, 'updateTitle')
 
