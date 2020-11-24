@@ -1,4 +1,4 @@
-from django.test import TestCase, RequestFactory
+from django.test import TestCase, RequestFactory, Client
 from ..models import Article, Comments, FavoriteArticle
 from django.urls import reverse
 from .. import views
@@ -26,13 +26,15 @@ class TestViews(TestCase):
 
     def test_article_update_view(self):
         user = User.objects.create_user(username='testuser1', password='12345')
-        article = Article.objects.create(user_id=user, title='testTitle1', body='testBody1')
+        c = Client()
+        c.login(username='testuser1', password='12345')
+        Article.objects.create(user_id=user, title='testTitle1', body='testBody1')
 
-        response = self.client.post(reverse('updatepage', args='2'), {
+        response = c.post(reverse('updatepage', args='2'), {
             'title': 'updateTitle',
             'body': 'updateBody',
         })
-
+        article = Article.objects.get(id=2)
         self.assertEquals(response.status_code, 302)
         self.assertEquals(article.title, 'updateTitle')
 
