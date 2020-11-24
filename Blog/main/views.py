@@ -1,7 +1,6 @@
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic.base import View
-from django.views.generic.edit import DeleteView
 from .models import Article, FavoriteArticle
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormMixin
@@ -27,7 +26,7 @@ class ArticleDetail(FormMixin, DetailView):
     def get_success_url(self, **kwargs):
         return reverse_lazy('article', kwargs={'pk': self.get_object().id})
 
-    def post(self, request, *args, **kwargs):
+    def post(self):
         form = self.get_form()
         if form.is_valid():
             return self.form_valid(form)
@@ -93,7 +92,7 @@ class ArticleDeleteView(LoginRequiredMixin, DeleteView):
 
 class AddToFavoriteView(View):
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, **kwargs):
         user_id = request.user.id
         article_id = kwargs.get('pk')
         if FavoriteArticle.objects.filter(article_id=article_id, user_id=user_id):
@@ -107,7 +106,7 @@ class AddToFavoriteView(View):
 
 class FavoriteView(View):
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         favorite_articles = FavoriteArticle.objects.all()
         context = {
             'fav': favorite_articles,
