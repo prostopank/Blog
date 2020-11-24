@@ -13,5 +13,5 @@ urlpatterns = [
     path('search', views.SearchView.as_view(), name='search'),
     path('favoritearticle', views.FavoriteView.as_view(), name='favoritearticle'),
     path('addfavorite/<int:pk>', views.AddToFavoriteView.as_view(), name='addfavorite'),
-    
+
 ]
