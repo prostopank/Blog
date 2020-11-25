@@ -26,7 +26,7 @@ class ArticleDetail(FormMixin, DetailView):
     def get_success_url(self, **kwargs):
         return reverse_lazy('article', kwargs={'pk': self.get_object().id})
 
-    def post(self):
+    def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
             return self.form_valid(form)
@@ -92,7 +92,7 @@ class ArticleDeleteView(LoginRequiredMixin, DeleteView):
 
 class AddToFavoriteView(View):
 
-    def get(self, request, **kwargs):
+    def get(self, request, *args, **kwargs):
         user_id = request.user.id
         article_id = kwargs.get('pk')
         if FavoriteArticle.objects.filter(article_id=article_id, user_id=user_id):
@@ -106,7 +106,7 @@ class AddToFavoriteView(View):
 
 class FavoriteView(View):
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         favorite_articles = FavoriteArticle.objects.all()
         context = {
             'fav': favorite_articles,
