@@ -1,3 +1,4 @@
+from django.db.models import F
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic.base import View
@@ -24,7 +25,15 @@ class ArticleDetail(FormMixin, DetailView):
     form_class = CommentForm
 
     def get_success_url(self, **kwargs):
+        # Article.objects.filter(id=self.get_object().id).update(views=F("views") + 1)
+        # print(request.method)
         return reverse_lazy('article', kwargs={'pk': self.get_object().id})
+
+    def get(self, request, *args, **kwargs):
+        statute = super().get_object()
+        statute.views += 1
+        statute.save()
+        return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
