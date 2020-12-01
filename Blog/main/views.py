@@ -28,9 +28,9 @@ class ArticleDetail(FormMixin, DetailView):
         return reverse_lazy('article', kwargs={'pk': self.get_object().id})
 
     def get(self, request, *args, **kwargs):
-        statute = super().get_object()
-        statute.views += 1
-        statute.save()
+        article = super().get_object()
+        article.views += 1
+        article.save()
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
