@@ -1,4 +1,6 @@
 from django import forms
+from django.forms import Textarea
+
 from .models import Article, Comments
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
@@ -48,8 +50,16 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comments
         fields = ('body',)
+        widgets = {
+            "body": Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Comment',
+                'rows': 3
+            })
+        }
 
-    def __init__(self, *args, **kwargs):
+    """def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
+"""
