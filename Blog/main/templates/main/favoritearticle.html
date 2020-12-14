@@ -4,18 +4,17 @@
 {% for i in fav%}
 {% if request.user == i.user_id %}
 <div class="card container">
-  <div class="card-header">
-      {{i.article_id.create_date}}
-  </div>
-  <div class="card-body">
-    <h5 class="card-title">{{i.article_id.title}}</h5>
-    <p class="card-text">{{i.article_id.body|truncatechars:"100"}}</p><br>
-    <a href="/article/{{i.article_id.id}}" class="btn btn-light">Перейти</a>
-  </div>
+    <div class="card-header">
+        {{i.article_id.create_date}}
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">{{i.article_id.title}}</h5>
+        <p class="card-text">{{i.article_id.body|truncatechars:"100"}}</p><br>
+        <a href="/article/{{i.article_id.id}}" class="btn btn-light">Go to</a>
+    </div>
 </div>
 {% endif %}
 {% endfor %}
-
 
 
 {% endblock %}
