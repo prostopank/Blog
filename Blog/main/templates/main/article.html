@@ -3,27 +3,28 @@
 {% block content %}
 
 <div class="container-xxl">
-    <p>Количество просмотров: {{get_article.views}}</p>
+    <p>Number of views: {{get_article.views}}</p>
     <h1>{{get_article.title}}</h1>
     <p>{{get_article.body}}</p>
     <a href="/">
-        <button class="btn text-primary">Вернуться назад</button>
+        <button class="btn text-primary">Come back</button>
     </a>
 
 
     {% if request.user.is_authenticated %}
 
     <a href="{% url 'addfavorite' pk=get_article.id %}">
-        <button class="btn text-danger" style="margin-left: 40px">Добавить в избранное</button>
+        <button class="btn text-danger" style="margin-left: 40px">Add to favourites</button>
     </a>
-    <hr><br><br>
-    <p>Комментарии {{get_article.comments_article.all.count}}</p>
+    <hr>
+    <br><br>
+    <p>Comments {{get_article.comments_article.all.count}}</p>
     <div class="modal-body text-left">
         <form action="" id="add_form" method="post" style="margin-right: 20%; margin-left: 80px">
             {% csrf_token %}
             {{form}}<br>
         </form>
-        <button type="submit" form="add_form" class="btn btn-primary" style="margin-left: 70%">Сохранить</button>
+        <button type="submit" form="add_form" class="btn btn-primary" style="margin-left: 70%">Save</button>
     </div>
     <br><br>
     {% endif %}
@@ -33,11 +34,11 @@
         {% for i in get_article.comments_article.all %}
         <div class="card" style="margin-left: 80px; margin-right: 80px">
             <div class="card-header border-light text-left">
-                Автор: <h4> {{i.user_id}}</h4>
+                Author: <h4> {{i.user_id}}</h4>
             </div>
             <div class="card-body text-left">
                 {{i.body}}
-                <p style="text-align: right">Дата создания: {{i.create_date}}</p>
+                <p style="text-align: right">Date of creation: {{i.create_date}}</p>
             </div>
         </div>
         <br>
